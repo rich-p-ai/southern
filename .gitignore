@@ -1,0 +1,17 @@
+# Local secrets and config
+.env
+.env.*
+*.local
+
+# Kube / OpenShift (never commit live credentials)
+kubeconfig
+*kubeconfig*
+*.key
+*.pem
+
+# OS / editor
+Thumbs.db
+.DS_Store
+
+# User-specific editor settings (path contains machine account)
+.vscode/
