@@ -6,7 +6,7 @@ runbook used to recover, deploy, inspect, and maintain them.
 
 | Cluster | Helm release | Raft cluster_name | F5 VIP |
 |---|---|---|---|
-| Prod DC      | `vault`     | `vault-prod-dc-cluster` | `vault.southernco.com` |
+| Prod DC      | `vault`     | `vault-prod-cluster`    | `vault.southernco.com` |
 | Non-prod DC  | `vault`     | `vault-dev-dc-cluster`  | (not yet wired) |
 | Vault-dev    | `vault-dev` | `vault-dev-cluster`     | (not yet wired) |
 
@@ -88,7 +88,10 @@ helm upgrade --install vault .\chart\vault `
 
 ## Cluster topology — Prod DC Vault
 
-`cluster_name = "vault-prod-dc-cluster"`, helm release name `vault`.
+`cluster_name = "vault-prod-cluster"`, helm release name `vault`.
+(Renamed from the original `vault-prod-dc-cluster` after the legacy
+`osxapch506pr` vault — which used the bare `vault-prod-cluster` name —
+was scaled down for decommissioning.)
 
 | Cluster (project) | Node ID | MetalLB IP |
 |---|---|---|

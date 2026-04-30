@@ -24,7 +24,7 @@ server:
         log_format  = "json"
         disable_mlock = true
 
-        cluster_name = "vault-prod-dc-cluster"
+        cluster_name = "vault-prod-cluster"
 
         api_addr     = "http://10.19.96.11:8200"
         cluster_addr = "http://10.19.96.11:8201"
