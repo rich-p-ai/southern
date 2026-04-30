@@ -1,0 +1,21 @@
+Vault Helm chart redistribution notice
+======================================
+
+The directory `chart/vault/` contains an unmodified copy of the official
+HashiCorp Vault Helm chart, version 0.28.1 (app version 1.17.2):
+
+    https://github.com/hashicorp/vault-helm
+    https://helm.releases.hashicorp.com
+
+The chart is licensed under MPL-2.0 — see `chart/vault/LICENSE` for the
+full license text and `chart/vault/CHANGELOG.md` for upstream history.
+
+The values files in `values/`, the LoadBalancer manifests in `manifests/`,
+the helper PowerShell scripts (`recover-helm-chart.ps1`, `inspect-vault.ps1`),
+and `README.md` are wrapper materials authored for this deployment and are
+NOT part of the upstream chart.
+
+To re-pull the chart fresh from the upstream:
+
+    helm repo add hashicorp https://helm.releases.hashicorp.com
+    helm pull hashicorp/vault --version 0.28.1 --untar

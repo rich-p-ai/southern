@@ -1,0 +1,90 @@
+﻿global:
+  openshift: true
+  tlsDisable: true
+injector:
+  enabled: false
+server:
+  auditStorage:
+    accessMode: ReadWriteOnce
+    enabled: true
+    size: 10Gi
+    storageClass: ""
+  dataStorage:
+    accessMode: ReadWriteOnce
+    enabled: true
+    size: 50Gi
+    storageClass: ""
+  ha:
+    enabled: true
+    apiAddr: "http://10.19.96.120:8200"
+    clusterAddr: "http://10.19.96.120:8201"
+    raft:
+      config: |
+        ui          = true
+        log_format  = "json"
+        disable_mlock = true
+
+        cluster_name = "vault-prod-dc-cluster"
+
+        api_addr     = "http://10.19.96.120:8200"
+        cluster_addr = "http://10.19.96.120:8201"
+
+        listener "tcp" {
+          address         = "[::]:8200"
+          cluster_address = "[::]:8201"
+          tls_disable     = 1
+          telemetry {
+            unauthenticated_metrics_access = true
+          }
+        }
+
+        storage "raft" {
+          path    = "/vault/data"
+          node_id = "vault-ga-506pr"
+        }
+
+        service_registration "kubernetes" {}
+
+        telemetry {
+          prometheus_retention_time = "30s"
+          disable_hostname          = true
+        }
+      enabled: true
+      setNodeId: false
+    replicas: 1
+  image:
+    pullPolicy: IfNotPresent
+    repository: docker.io/hashicorp/vault
+    tag: 1.18.3
+  livenessProbe:
+    enabled: false
+  readinessProbe:
+    enabled: true
+    path: "/v1/sys/health?standbyok=true&uninitcode=204"
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+    requests:
+      cpu: 1000m
+      memory: 1Gi
+  route:
+    enabled: true
+    host: ""
+    tls:
+      termination: edge
+  service:
+    annotations: {}
+    enabled: true
+    port: 8200
+    targetPort: 8200
+    type: ClusterIP
+  serviceAccount:
+    annotations: {}
+    create: true
+    name: vault
+  standalone:
+    enabled: false
+ui:
+  enabled: true
+  serviceType: ClusterIP

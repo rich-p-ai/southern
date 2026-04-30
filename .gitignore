@@ -1,7 +1,18 @@
 # Local secrets and config
 .env
 .env.*
+!.env.example
 *.local
+oc-clusters/local.env
+
+# Vault recovery/operations - never commit
+vault/NEW-KEYS-DO-NOT-COMMIT.json
+vault/NEW-KEYS-NONPROD-DO-NOT-COMMIT.json
+vault/NEW-KEYS-VAULT-DEV-DO-NOT-COMMIT.json
+vault/vault-notes.md
+vault/snapshots/
+vault/recovered-*/
+vault/upstream/
 
 # Kube / OpenShift (never commit live credentials)
 kubeconfig

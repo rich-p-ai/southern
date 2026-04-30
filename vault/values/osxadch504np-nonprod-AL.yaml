@@ -1,0 +1,91 @@
+﻿global:
+  openshift: true
+  tlsDisable: true
+injector:
+  enabled: false
+server:
+  auditStorage:
+    accessMode: ReadWriteOnce
+    enabled: true
+    size: 5Gi
+    storageClass: ""
+  dataStorage:
+    accessMode: ReadWriteOnce
+    enabled: true
+    size: 10Gi
+    storageClass: ""
+  ha:
+    enabled: true
+    apiAddr: "http://10.15.96.60:8200"
+    clusterAddr: "http://10.15.96.60:8201"
+    raft:
+      config: |
+        ui          = true
+        log_format  = "json"
+        disable_mlock = true
+
+        cluster_name = "vault-dev-dc-cluster"
+
+        # MetalLB IPs reachable from all non-prod clusters
+        api_addr     = "http://10.15.96.60:8200"
+        cluster_addr = "http://10.15.96.60:8201"
+
+        listener "tcp" {
+          address         = "[::]:8200"
+          cluster_address = "[::]:8201"
+          tls_disable     = 1
+          telemetry {
+            unauthenticated_metrics_access = true
+          }
+        }
+
+        storage "raft" {
+          path    = "/vault/data"
+          node_id = "vault-al-504np"
+        }
+
+        service_registration "kubernetes" {}
+
+        telemetry {
+          prometheus_retention_time = "30s"
+          disable_hostname          = true
+        }
+      enabled: true
+      setNodeId: false
+    replicas: 1
+  image:
+    pullPolicy: IfNotPresent
+    repository: docker.io/hashicorp/vault
+    tag: 1.18.3
+  livenessProbe:
+    enabled: false
+  readinessProbe:
+    enabled: true
+    path: "/v1/sys/health?standbyok=true&uninitcode=204"
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1024Mi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+  route:
+    enabled: true
+    host: ""
+    tls:
+      termination: edge
+  service:
+    annotations: {}
+    enabled: true
+    port: 8200
+    targetPort: 8200
+    type: ClusterIP
+  serviceAccount:
+    annotations: {}
+    create: true
+    name: vault
+  standalone:
+    enabled: false
+ui:
+  enabled: true
+  serviceType: ClusterIP
